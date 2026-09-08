@@ -11,7 +11,7 @@ const RAW_RUNTIME_STATE =
   ],\
   "dependencyTreeRoots": [\
     {\
-      "name": "homework-py",\
+      "name": "MoZhi",\
       "reference": "workspace:."\
     }\
   ],\
@@ -19,7 +19,7 @@ const RAW_RUNTIME_STATE =
   "ignorePatternData": "(^(?:\\\\.yarn\\\\/sdks(?:\\\\/(?!\\\\.{1,2}(?:\\\\/|$))(?:(?:(?!(?:^|\\\\/)\\\\.{1,2}(?:\\\\/|$)).)*?)|$))$)",\
   "pnpZipBackend": "libzip",\
   "fallbackExclusionList": [\
-    ["homework-py", ["workspace:."]]\
+    ["MoZhi", ["workspace:."]]\
   ],\
   "fallbackPool": [\
   ],\
@@ -29,9 +29,9 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./",\
         "packageDependencies": [\
           ["@types/node", "npm:26.5.0"],\
+          ["MoZhi", "workspace:."],\
           ["docx", "npm:9.7.1"],\
           ["esbuild", "npm:0.28.2"],\
-          ["homework-py", "workspace:."],\
           ["pinyin-pro", "npm:3.29.3"],\
           ["prettier", "npm:3.9.6"],\
           ["typescript", "patch:typescript@npm%3A7.0.2#optional!builtin<compat/typescript>::version=7.0.2&hash=3bafbf"]\
@@ -471,6 +471,21 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["MoZhi", [\
+      ["workspace:.", {\
+        "packageLocation": "./",\
+        "packageDependencies": [\
+          ["@types/node", "npm:26.5.0"],\
+          ["MoZhi", "workspace:."],\
+          ["docx", "npm:9.7.1"],\
+          ["esbuild", "npm:0.28.2"],\
+          ["pinyin-pro", "npm:3.29.3"],\
+          ["prettier", "npm:3.9.6"],\
+          ["typescript", "patch:typescript@npm%3A7.0.2#optional!builtin<compat/typescript>::version=7.0.2&hash=3bafbf"]\
+        ],\
+        "linkType": "SOFT"\
+      }]\
+    ]],\
     ["core-util-is", [\
       ["npm:1.0.3", {\
         "packageLocation": "../../../.yarn/berry/cache/core-util-is-npm-1.0.3-ca74b76c90-10c0.zip/node_modules/core-util-is/",\
@@ -539,21 +554,6 @@ const RAW_RUNTIME_STATE =
           ["minimalistic-assert", "npm:1.0.1"]\
         ],\
         "linkType": "HARD"\
-      }]\
-    ]],\
-    ["homework-py", [\
-      ["workspace:.", {\
-        "packageLocation": "./",\
-        "packageDependencies": [\
-          ["@types/node", "npm:26.5.0"],\
-          ["docx", "npm:9.7.1"],\
-          ["esbuild", "npm:0.28.2"],\
-          ["homework-py", "workspace:."],\
-          ["pinyin-pro", "npm:3.29.3"],\
-          ["prettier", "npm:3.9.6"],\
-          ["typescript", "patch:typescript@npm%3A7.0.2#optional!builtin<compat/typescript>::version=7.0.2&hash=3bafbf"]\
-        ],\
-        "linkType": "SOFT"\
       }]\
     ]],\
     ["immediate", [\

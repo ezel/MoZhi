@@ -1,10 +1,10 @@
 {
-    "name": "MoZhi",
-    "version": "0.0.1",
-    "description": "make homework for pinyin",
-    "author": "Martin Shi",
-    "license": "MIT",
-    "private" : true,
+  "name": "MoZhi",
+  "version": "0.0.1",
+  "description": "make homework for pinyin",
+  "author": "Martin Shi",
+  "license": "MIT",
+  "private": true,
   "scripts": {
     "build": "node esbuild.config.js",
     "dev": "node esbuild.config.js --watch",
