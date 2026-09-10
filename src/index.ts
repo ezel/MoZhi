@@ -1,12 +1,5 @@
 import * as readline from 'readline';
-import { pinyin } from 'pinyin-pro';
 import { exportDoc } from './doctemplate.ts';
-
-export function getPinyin(text: string): string {
-  return pinyin(text, { toneType: 'symbol', type: 'array' }).join(' ');
-}
-
-console.log(getPinyin('你好世界'));
 
 // 创建命令行读取接口
 const rl = readline.createInterface({
@@ -16,7 +9,7 @@ const rl = readline.createInterface({
 
 const MAX_IN_A_ROW: number = 10;
 
-function word2rows(input: string): string[] {
+function word2rows(input: string): string[][] {
   const words = input.split(' ').filter((word) => word.length > 0);
 
   for (let i = words.length - 1; i > 0; i--) {
@@ -54,9 +47,8 @@ function word2rows(input: string): string[] {
 // 提示用户输入
 rl.question('请输入一大串汉字: ', (answer) => {
   if (answer.trim()) {
-    console.log(word2rows(answer));
-    const result = getPinyin(answer);
-    console.log('\n result::\n', result);
+    rows = word2rows(answer);
+    exportDoc(rows, { showPinyin: true, showHanzi: true });
   } else {
     console.log('\n no input content.');
   }

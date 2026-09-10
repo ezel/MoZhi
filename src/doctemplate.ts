@@ -7,17 +7,25 @@ import {
   TableCell,
   TextRun,
   BorderStyle,
+  TableLayoutType,
+    //HeightRule,
   WidthType,
   AlignmentType,
   IBorderOptions,
 } from 'docx';
+import { pinyin } from 'pinyin-pro';
+
+function getPinyin(text: string): string {
+  return pinyin(text, { toneType: 'symbol', type: 'array' }).join(' ');
+}
+
 import * as fs from 'fs';
 
-// 1. 定义几种不同的边框样式
-const defaultBorder = { style: BorderStyle.SINGLE, size: 4, color: '999999' }; // 默认细灰线
-const thickBorder = { style: BorderStyle.SINGLE, size: 12, color: '000000' }; // 粗黑线
-const redDashedBorder = { style: BorderStyle.DASHED, size: 8, color: 'FF0000' }; // 红色虚线
-const noBorder = { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' }; // 无边框
+// 定义边框样式
+const DefaultBorder = { style: BorderStyle.SINGLE, size: 4, color: '999999' }; // 默认细灰线
+const ThickBorder = { style: BorderStyle.SINGLE, size: 12, color: '000000' }; // 粗黑线
+const RedDashedBorder = { style: BorderStyle.DASHED, size: 8, color: 'FF0000' }; // 红色虚线
+const NoBorder = { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' }; // 无边框
 
 function createCell(run: TextRun, border: IBorderOptions): TableCell {
   return new TableCell({
@@ -27,6 +35,7 @@ function createCell(run: TextRun, border: IBorderOptions): TableCell {
         children: [run],
       }),
     ],
+      //width: { size: run.text ? run.text.length * 12 : 12, type: WidthType.PERCENTAGE },
     borders: {
       top: border,
       bottom: border,
@@ -46,36 +55,51 @@ function createRow(words: string[], border: IBorderOptions): TableRow {
   });
 }
 
-function createTable(words: string[], border: IBorderOptions): Table {
+interface PinyinFlags {
+  showPinyin: boolean;
+  showHanzi: boolean;
+}
+
+function createTable(
+  words: string[],
+  flags: PinyinFlags,
+  border: IBorderOptions = DefaultBorder
+): Table {
   const emptyWords = words.map(() => '');
+  const pinyinWords = words.map((w) => getPinyin(w));
   return new Table({
-    rows: [createRow(words, border), createRow(emptyWords, border)],
-    width: { size: 100, type: WidthType.PERCENTAGE },
+    rows: [
+      ...(flags.showPinyin ? [createRow(pinyinWords, NoBorder)] : [createRow(emptyWords, border)]),
+      ...(flags.showHanzi ? [createRow(words, NoBorder)] : [createRow(emptyWords, border)]),
+    ],
+      //width: { size: 100, type: WidthType.PERCENTAGE },
+      //layout: TableLayoutType.FIXED,
+      //height: {
+      //value: 2418,
+      //rule: HeightRule.EXACTLY,
+      //},
     borders: {
-      top: defaultBorder,
-      bottom: defaultBorder,
-      left: defaultBorder,
-      right: defaultBorder,
-      insideHorizontal: defaultBorder,
-      insideVertical: defaultBorder,
+      top: DefaultBorder,
+      bottom: DefaultBorder,
+      left: DefaultBorder,
+      right: DefaultBorder,
+      insideHorizontal: DefaultBorder,
+      insideVertical: DefaultBorder,
     },
   });
 }
 
-export function exportDoc() {
+export function exportDoc(rows: string[][], flags: PinyinFlags) {
   const doc = new Document({
     sections: [
       {
-        children: [
-          createTable(['1', '2', '3'], thickBorder),
-          createTable(['2222', '333333'], defaultBorder),
-        ],
+        children: rows.map((r) => createTable(r, flags)),
       },
     ],
   });
 
   Packer.toBuffer(doc).then((buffer) => {
-    fs.writeFileSync('CustomCellBorders.docx', buffer);
-    console.log('个性化边框文档生成成功！');
+    fs.writeFileSync('MoZhiBorders.docx', buffer);
+    console.log('MoZhi生成成功！');
   });
 }
