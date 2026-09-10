@@ -71,7 +71,7 @@ function createTable(
   flags: PinyinFlags,
   border: IBorderOptions = DefaultBorder
 ): Table {
-  const emptyWords = words.map(() => '');
+  const emptyWords = words.map(() => '\u200B');
   const pinyinWords = words.map((w) => getPinyin(w));
   return new Table({
     rows: [
@@ -106,7 +106,7 @@ export function exportDoc(rows: string[][], flags: PinyinFlags) {
   });
 
   Packer.toBuffer(doc).then((buffer) => {
-    fs.writeFileSync('MoZhiBorders.docx', buffer);
-    console.log('MoZhi生成成功！');
+    fs.writeFileSync(`mozhi_${Date.now()}.docx`, buffer);
+    console.log('docx generated!');
   });
 }
