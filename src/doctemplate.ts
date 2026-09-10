@@ -8,11 +8,13 @@ import {
   TextRun,
   BorderStyle,
   TableLayoutType,
-    //HeightRule,
+  HeightRule,
   WidthType,
   AlignmentType,
   IBorderOptions,
+  convertMillimetersToTwip,
 } from 'docx';
+
 import { pinyin } from 'pinyin-pro';
 
 function getPinyin(text: string): string {
@@ -35,7 +37,7 @@ function createCell(run: TextRun, border: IBorderOptions): TableCell {
         children: [run],
       }),
     ],
-      //width: { size: run.text ? run.text.length * 12 : 12, type: WidthType.PERCENTAGE },
+    //width: { size: run.text ? run.text.length * 12 : 12, type: WidthType.PERCENTAGE },
     borders: {
       top: border,
       bottom: border,
@@ -45,13 +47,17 @@ function createCell(run: TextRun, border: IBorderOptions): TableCell {
   });
 }
 
-function createRow(words: string[], border: IBorderOptions): TableRow {
+function createRow(words: string[], border: IBorderOptions, size: number = 28): TableRow {
   const rows: TableCell[] = [];
   for (const word of words) {
-    rows.push(createCell(new TextRun({ text: word }), border));
+    rows.push(createCell(new TextRun({ text: word, size: size }), border));
   }
   return new TableRow({
     children: rows,
+    height: {
+      value: convertMillimetersToTwip(1.4),
+      rule: HeightRule.EXACTLY,
+    },
   });
 }
 
@@ -72,12 +78,7 @@ function createTable(
       ...(flags.showPinyin ? [createRow(pinyinWords, NoBorder)] : [createRow(emptyWords, border)]),
       ...(flags.showHanzi ? [createRow(words, NoBorder)] : [createRow(emptyWords, border)]),
     ],
-      //width: { size: 100, type: WidthType.PERCENTAGE },
-      //layout: TableLayoutType.FIXED,
-      //height: {
-      //value: 2418,
-      //rule: HeightRule.EXACTLY,
-      //},
+    width: { size: 100, type: WidthType.PERCENTAGE },
     borders: {
       top: DefaultBorder,
       bottom: DefaultBorder,
@@ -90,10 +91,16 @@ function createTable(
 }
 
 export function exportDoc(rows: string[][], flags: PinyinFlags) {
+  const section_children = [];
+  for (const row of rows) {
+    section_children.push(createTable(row, flags));
+    section_children.push(new Paragraph({ text: '' }));
+  }
+
   const doc = new Document({
     sections: [
       {
-        children: rows.map((r) => createTable(r, flags)),
+        children: section_children,
       },
     ],
   });
