@@ -67,6 +67,10 @@ rl.question(
     if (res[2] && (res[2] === '1' || res[2] === 'true')) {
       status.showHanzi = true;
     }
+    if (res[3] && (res[3] === '1' || res[3] === 'true')) {
+      status.showHanzi = true;
+    }
+
     console.log(status);
     rl.question('请输入一大串汉字:\n', (answer) => {
       if (answer.trim()) {
@@ -74,7 +78,7 @@ rl.question(
         exportDoc(
           rows,
           { showPinyin: status.showPinyin, showHanzi: status.showHanzi },
-          `mozhi_${Date.now()}.docx`
+          status.twoSided
         );
       } else {
         console.log('\n no input content.');

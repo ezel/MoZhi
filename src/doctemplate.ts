@@ -1,6 +1,7 @@
 import {
   Document,
   Packer,
+  PageBreak,
   Paragraph,
   Table,
   TableRow,
@@ -90,11 +91,23 @@ function createTable(
   });
 }
 
-export function exportDoc(rows: string[][], flags: PinyinFlags) {
+export function exportDoc(rows: string[][], flags: PinyinFlags, twoSided: boolean = false) {
   const section_children = [];
-  for (const row of rows) {
-    section_children.push(createTable(row, flags));
-    section_children.push(new Paragraph({ text: '' }));
+  if (twoSided) {
+    for (const row of rows) {
+      section_children.push(createTable(row, { showPinyin: true, showHanzi: false }));
+      section_children.push(new Paragraph({ text: '' }));
+    }
+    section_children.push(new Paragraph({ children: [new PageBreak()] }));
+    for (const row of rows) {
+      section_children.push(createTable(row, { showPinyin: false, showHanzi: true }));
+      section_children.push(new Paragraph({ text: '' }));
+    }
+  } else {
+    for (const row of rows) {
+      section_children.push(createTable(row, flags));
+      section_children.push(new Paragraph({ text: '' }));
+    }
   }
 
   const doc = new Document({
